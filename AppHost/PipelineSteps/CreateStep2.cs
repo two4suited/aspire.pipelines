@@ -13,27 +13,21 @@ public static class CreateStep2
         
         builder.Pipeline.AddStep(PipelineStepNames.CreateStep2.ToStepName(), async context =>
         {
-            // Get logger
+            var runStep2Env = Environment.GetEnvironmentVariable("ASPIRE_RUN_STEP2");
+            if (!bool.TryParse(runStep2Env, out var shouldRun) || !shouldRun)
+            {
+                return;
+            }
+            
             var loggerFactory = context.Services.GetRequiredService<ILoggerFactory>();
             var logger = loggerFactory.CreateLogger(nameof(CreateStep2));
             
-            // Check if Step 1 wants Step 2 to run via environment variable
-            var runStep2Env = Environment.GetEnvironmentVariable("ASPIRE_RUN_STEP2");
-            var runStep2 = bool.TryParse(runStep2Env, out var shouldRun) && shouldRun;
+            var repoRoot = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ".."));
+            var filePath = Path.Combine(repoRoot, "step2.txt");
             
-            if (runStep2)
-            {
-                var repoRoot = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ".."));
-                var filePath = Path.Combine(repoRoot, "step2.txt");
-                
-                await File.WriteAllTextAsync(filePath, $"Step 2 executed at {DateTime.Now}");
-                
-                logger.LogInformation("Created {FilePath}", filePath);
-            }
-            else
-            {
-                logger.LogInformation("Step 2 skipped (not requested by Step 1).");
-            }
+            await File.WriteAllTextAsync(filePath, $"Step 2 executed at {DateTime.Now}");
+            
+            logger.LogInformation("Created {FilePath}", filePath);
         },dependsOn: PipelineStepNames.Driver.ToStepName());
         
         return builder;

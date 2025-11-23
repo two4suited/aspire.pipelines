@@ -11,19 +11,14 @@ public static class CreateStep1
     {
         builder.Pipeline.AddStep(PipelineStepNames.CreateStep1.ToStepName(), async context =>
         {
-            // Get logger
-            var loggerFactory = context.Services.GetRequiredService<ILoggerFactory>();
-            var logger = loggerFactory.CreateLogger(nameof(CreateStep1));
-            
-            // Check if the setup step wants Step 1 to run
             var runStep1Env = Environment.GetEnvironmentVariable("ASPIRE_RUN_STEP1");
-            var runStep1 = bool.TryParse(runStep1Env, out var shouldRun) && shouldRun;
-            
-            if (!runStep1)
+            if (!bool.TryParse(runStep1Env, out var shouldRun) || !shouldRun)
             {
-                logger.LogInformation("Step 1 skipped (not enabled in setup).");
                 return;
             }
+            
+            var loggerFactory = context.Services.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger(nameof(CreateStep1));
             
             var repoRoot = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ".."));
             var filePath = Path.Combine(repoRoot, "step1.txt");
