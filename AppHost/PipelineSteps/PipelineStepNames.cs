@@ -21,5 +21,18 @@ public static class PipelineStepNamesExtensions
             _ => throw new ArgumentOutOfRangeException(nameof(step), step, null)
         };
     }
+
+    public static string[] GetDependencies(this PipelineStepNames step)
+    {
+        return step switch
+        {
+            PipelineStepNames.Finisher => new[]
+            {
+                PipelineStepNames.CreateStep1.ToStepName(),
+                PipelineStepNames.CreateStep2.ToStepName()
+            },
+            _ => Array.Empty<string>()
+        };
+    }
 }
 
