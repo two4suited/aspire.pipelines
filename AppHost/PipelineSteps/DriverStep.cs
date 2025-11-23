@@ -69,7 +69,7 @@ public static class DriverStep
             logger.LogInformation("Driver complete - Step 1: {Step1Status}, Step 2: {Step2Status}",
                 runStep1 ? "enabled": "disabled",
                 runStep2 ? "enabled": "disabled");
-        },requiredBy:PipelineStepNames.Finisher.ToStepName());
+        });
         
         return builder;
     }

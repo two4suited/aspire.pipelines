@@ -13,7 +13,7 @@ public static class PipelineOrchestrator
     {
         builder.Pipeline.AddStep(PipelineStepNames.Finisher.ToStepName(), async context =>
         {
-        });//, dependsOn: new[] { PipelineStepNames.Driver.ToStepName(),  PipelineStepNames.CreateStep2.ToStepName() });
+        }, dependsOn: new[] { PipelineStepNames.CreateStep1.ToStepName(), PipelineStepNames.CreateStep2.ToStepName() });
 
         return builder
             .AddDriverStep()
