@@ -1,7 +1,5 @@
 #pragma warning disable ASPIREPIPELINES001
 #pragma warning disable ASPIREINTERACTION001
-using Aspire.Hosting;
-using Aspire.Hosting.Pipelines;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

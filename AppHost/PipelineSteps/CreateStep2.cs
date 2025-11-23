@@ -10,6 +10,7 @@ public static class CreateStep2
 {
     public static IDistributedApplicationBuilder AddCreateStep2(this IDistributedApplicationBuilder builder)
     {
+        
         builder.Pipeline.AddStep(PipelineStepNames.CreateStep2.ToStepName(), async context =>
         {
             // Get logger

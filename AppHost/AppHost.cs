@@ -5,10 +5,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 #pragma warning disable ASPIREPIPELINES001
 
-builder
-    .AddCreateServiceDefaultsStep()
-    .AddCreateApiStep()
-    .AddOutputPipelineStep();
+builder.AddPipelineSteps();
 
 #pragma warning restore ASPIREPIPELINES001
 

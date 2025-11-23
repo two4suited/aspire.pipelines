@@ -54,23 +54,22 @@ public static class DriverStep
                 cancellationToken: context.CancellationToken);
 
             var runStep2 = step2Result.Data?.Value?.ToLower() is "yes" or "y";
-
-            if (!runStep1)
-            {
-                builder.AddCreateStep1();
-            }
+            var loggerFactory = context.Services.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger(nameof(DriverStep));
+            
+            // Display all resources in the builder
+          
 
             // Store decisions in environment variables for the steps to check
             Environment.SetEnvironmentVariable("ASPIRE_RUN_STEP1", runStep1.ToString(), EnvironmentVariableTarget.Process);
             Environment.SetEnvironmentVariable("ASPIRE_RUN_STEP2", runStep2.ToString(), EnvironmentVariableTarget.Process);
 
             // Use logger for output
-            var loggerFactory = context.Services.GetRequiredService<ILoggerFactory>();
-            var logger = loggerFactory.CreateLogger(nameof(DriverStep));
+          
             logger.LogInformation("Driver complete - Step 1: {Step1Status}, Step 2: {Step2Status}",
                 runStep1 ? "enabled": "disabled",
                 runStep2 ? "enabled": "disabled");
-        });
+        },requiredBy:PipelineStepNames.Finisher.ToStepName());
         
         return builder;
     }
